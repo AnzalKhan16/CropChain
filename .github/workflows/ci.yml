@@ -28,20 +28,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: smart-contracts/package-lock.json
 
-      # Step 3: Install dependencies
+      # Step 3: Cache Node Modules
+      - name: Cache Node Modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: smart-contracts/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('smart-contracts/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Step 4: Install dependencies
       - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         working-directory: smart-contracts/
         run: npm ci --legacy-peer-deps
 
-      # Step 4: Run Hardhat tests
+      # Step 5: Run Hardhat tests
       - name: Run Smart Contract Tests
         working-directory: smart-contracts/
         run: npm run test:ci
 
-      # Step 5: Compile contracts (additional verification)
+      # Step 6: Compile contracts (additional verification)
       - name: Compile Smart Contracts
         working-directory: smart-contracts/
         run: npx hardhat compile
@@ -61,15 +70,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: smart-contracts/package-lock.json
 
-      # Step 3: Install dependencies
+      # Step 3: Cache Node Modules
+      - name: Cache Node Modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: smart-contracts/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('smart-contracts/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Step 4: Install dependencies
       - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         working-directory: smart-contracts/
         run: npm ci --legacy-peer-deps
 
-      # Step 4: Run Slither Security Analysis
+      # Step 5: Run Slither Security Analysis
       - name: Run Slither Security Analysis
         uses: crytic/slither-action@v0.4.0
         continue-on-error: true
@@ -93,15 +111,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: backend/package-lock.json
 
-      # Step 3: Install backend dependencies
+      # Step 3: Cache Node Modules
+      - name: Cache Node Modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: backend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Step 4: Install backend dependencies
       - name: Install backend dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         working-directory: backend/
         run: npm ci --legacy-peer-deps
 
-      # Step 4: Run backend tests
+      # Step 5: Run backend tests
       - name: Run Backend Tests
         working-directory: backend/
         run: npm run test:ci
@@ -121,15 +148,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
 
-      # Step 3: Install frontend dependencies
+      # Step 3: Cache Node Modules
+      - name: Cache Node Modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Step 4: Install frontend dependencies
       - name: Install frontend dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         working-directory: frontend/
         run: npm ci --legacy-peer-deps
 
-      # Step 4: Build frontend (TypeScript compilation check)
+      # Step 5: Build frontend (TypeScript compilation check)
       - name: Build Frontend
         working-directory: frontend/
         run: npm run build
@@ -149,15 +185,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
 
-      # Step 3: Install frontend dependencies
+      # Step 3: Cache Node Modules
+      - name: Cache Node Modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Step 4: Install frontend dependencies
       - name: Install frontend dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         working-directory: frontend/
         run: npm ci --legacy-peer-deps
 
-      # Step 4: Run frontend tests
+      # Step 5: Run frontend tests
       - name: Run Frontend Tests
         working-directory: frontend/
         run: npm run test:ci
